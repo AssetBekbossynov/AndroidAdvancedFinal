@@ -16,7 +16,7 @@ class MainPresenter(override var view: MainContract.View?) : MainContract.Presen
             }else{
                 view?.onGetSuccess(contacts, "GroupName")
             }
-        })
+        }).start()
     }
 
 }

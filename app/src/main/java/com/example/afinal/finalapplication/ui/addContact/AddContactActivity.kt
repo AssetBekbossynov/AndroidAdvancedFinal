@@ -70,7 +70,7 @@ class AddContactActivity : AppCompatActivity(), AddContactContract.View {
     }
 
     override fun onAddError() {
-        Logger.msg("error happened")
+        Logger.msg("error happened adding")
     }
 
     override fun onGetGroupSuccess(list: ArrayList<Int>) {
@@ -80,6 +80,6 @@ class AddContactActivity : AppCompatActivity(), AddContactContract.View {
     }
 
     override fun onGetGroupError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Logger.msg("error happened get group")
     }
 }
