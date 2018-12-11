@@ -17,7 +17,7 @@ interface AddContactContract{
     }
 
     interface Presenter: BasePresenter<View>{
-        fun addContact(contact: Contact, contactDao: ContactDao)
+        fun addContact(name: String, mobilePhone: String, homePhone: String, workPhone: String, image: String, groupId: Int, contactDao: ContactDao)
         fun getGroups(groupDao: GroupDao)
     }
 }

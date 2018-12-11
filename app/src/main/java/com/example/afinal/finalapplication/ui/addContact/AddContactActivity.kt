@@ -50,15 +50,12 @@ class AddContactActivity : AppCompatActivity(), AddContactContract.View {
         add.setOnClickListener {
 
             if (groupId != -1){
-                val contact = Contact(contactDao.getCount(),
-                        name.text.toString(),
+
+                presenter.addContact(name.text.toString(),
                         mobilePhone.text.toString(),
                         homePhone.text.toString(),
                         workPhone.text.toString(),
-                        "image",
-                        groupId)
-
-                presenter.addContact(contact, contactDao)
+                        "image", groupId, contactDao)
             }
 
         }

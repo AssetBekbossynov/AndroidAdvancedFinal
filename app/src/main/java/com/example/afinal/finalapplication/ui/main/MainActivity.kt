@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import com.example.afinal.finalapplication.MyApp
 import com.example.afinal.finalapplication.R
 import com.example.afinal.finalapplication.dao.ContactDao
@@ -46,20 +47,28 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         adapter = ListAdapter(contacts, this)
 
+        rv.adapter = adapter
+        rv.layoutManager = LinearLayoutManager(this)
+
         addGroup()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Logger.msg("onActivityResult")
         if (requestCode == ADD_CONTACT && resultCode == Activity.RESULT_OK){
             presenter.getContacts(contactDao, groupDao)
+            Logger.msg("onActivityResult code = OK")
         }
     }
 
     override fun onGetSuccess(contacts: ArrayList<Contact>, groupName: String) {
+        Logger.msg("MainActivity onGetSuccess " + contacts)
         this.contacts.clear()
         this.contacts.addAll(contacts)
-        adapter.notifyDataSetChanged()
+        runOnUiThread {
+            adapter.notifyDataSetChanged()
+        }
     }
 
     override fun onGetError() {
@@ -77,6 +86,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             groupDao.addGroup(newGroup3)
 
             Logger.msg("groups " + groupDao.getAllGroup())
-        })
+        }).start()
     }
 }
