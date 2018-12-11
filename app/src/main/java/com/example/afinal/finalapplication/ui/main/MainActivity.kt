@@ -5,6 +5,8 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import com.example.afinal.finalapplication.MyApp
 import com.example.afinal.finalapplication.R
 import com.example.afinal.finalapplication.dao.ContactDao
@@ -28,6 +30,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     lateinit var adapter: ListAdapter
 
     private var contacts: ArrayList<Contact> = ArrayList()
+    private var displayedContacts: ArrayList<Contact> = ArrayList()
 
     override val presenter: MainContract.Presenter by inject { parametersOf(this) }
 
@@ -45,7 +48,34 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             startActivityForResult(intent, ADD_CONTACT)
         }
 
-        adapter = ListAdapter(contacts, this)
+        search.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                if(s!!.equals("")){
+                    displayedContacts.clear()
+                    displayedContacts.addAll(contacts)
+                }else{
+                    Logger.msg("search " + s)
+                    displayedContacts.clear()
+                    for (i in 0 until contacts.size){
+                        if (contacts.get(i).name.contains(s)){
+                            displayedContacts.add(contacts.get(i))
+                        }
+                    }
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+
+        adapter = ListAdapter(displayedContacts, this)
 
         rv.adapter = adapter
         rv.layoutManager = LinearLayoutManager(this)
@@ -66,6 +96,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         Logger.msg("MainActivity onGetSuccess " + contacts)
         this.contacts.clear()
         this.contacts.addAll(contacts)
+        displayedContacts.clear()
+        displayedContacts.addAll(contacts)
         runOnUiThread {
             adapter.notifyDataSetChanged()
         }

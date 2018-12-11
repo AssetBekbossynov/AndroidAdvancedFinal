@@ -25,9 +25,8 @@ class ListAdapter(private val list: ArrayList<Contact>, private val context: Con
         holder.itemView.name.text = list.get(position).name
         holder.itemView.groupName.text = list.get(position).groupId.toString()
         holder.itemView.setOnClickListener {
-            Logger.msg("position " + position)
             val intent = Intent(context, DescriptionActivity::class.java)
-            intent.putExtra("position", position)
+            intent.putExtra("position", list.get(position).id)
             context.startActivity(intent)
         }
     }
